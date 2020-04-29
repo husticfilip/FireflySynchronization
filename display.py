@@ -7,16 +7,12 @@ def display_population(population):
     y = [i.y_coord for i in population]
 
     plt.figure(0)
-    plt.xlim(0, params['X_MAX'])
-    plt.ylim(0, params['Y_MAX'])
+    plt.xlim(-0.5, params['X_MAX'] + 1)
+    plt.ylim(-0.5, params['Y_MAX'] + 1)
     plt.scatter(x ,y, c="black")
-    return plt
 
-def update_plot(population):
-    x_on = [i.x_coord for i in population if i.isBlinking]
-    x_off = [i.x_coord for i in population if not i.isBlinking]
-    y_on = [i.y_coord for i in population if i.isBlinking]
-    y_off = [i.y_coord for i in population if not i.isBlinking]
-
-    plt.scatter(x_off ,y_off, c="black")
-    plt.scatter(x_on, y_on, c="red")
+def update_plot(firefly):
+    plt.scatter(firefly.x_coord ,firefly.y_coord, c="red")
+    plt.pause(params['BLINKING_TIME'])
+    plt.scatter(firefly.x_coord ,firefly.y_coord, c="black")
+    plt.pause(0.1)

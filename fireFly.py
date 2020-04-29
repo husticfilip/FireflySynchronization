@@ -1,10 +1,10 @@
 import time
-
+from display import update_plot
 debug = 1
 
 class FireFly:
 
-    def __init__(self,id ,x_coord, y_coord, period, subtraction_time, add_period_function, latency):
+    def __init__(self, id ,x_coord, y_coord, period, subtraction_time, add_period_function, latency):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -42,6 +42,7 @@ class FireFly:
 
     def signal(self):
         if debug: print(time.strftime("%H:%M:%S:%MS", time.localtime()), "Firefly: ", self.id, " blinked")
+        update_plot(self)
         for neighbour in self.neighbours:
             neighbour.setSignal()
 
