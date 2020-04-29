@@ -33,10 +33,6 @@ def main():
         worker.start()
         time.sleep(0.1) #TODO remove magic number later
 
-
-    for _ in range(params["SIMULATION_TIME"]):
-        plt.pause(0.5)
-        update_plot(population)
     plt.show()
 
 
