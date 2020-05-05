@@ -18,12 +18,12 @@ def printFireflyesStates(fireflies, timer):
 
     for firefly in fireflies:
         if firefly.STAGE == Stage.WAITING_TO_START:
-            print(" X ",end='  ')
+            print(" X ",end='   ')
         elif firefly.STAGE == Stage.COUNTING_DOWN:
-            print("%.3f" % firefly.current_time_counting, end='  ')
+            print("%.3f" % firefly.current_time_counting, end='     ')
         elif firefly.STAGE == Stage.BLINKED:
-            print(" B " % firefly.current_time_counting, end='  ')
+            print(" B ", end='       ')
         else:
-            print("%.2fT" % firefly.current_time_waiting, end='  ')
+            print("%.2fT" % firefly.current_time_waiting, end='     ')
 
     print()

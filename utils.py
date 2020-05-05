@@ -34,13 +34,13 @@ def generate_population_manualy():
 
     fireflyes.append(FireFly(1, 0, 0, 4, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=0))
     fireflyes.append(FireFly(2, 1, 2, 2.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=1))
-    #fireflyes.append(FireFly(3, 4, 5, 5.5, 2, 1, 1))
-    #fireflyes.append(FireFly(4, 9, 9, 6.5, 2, 1, 1))
+    fireflyes.append(FireFly(3, 4, 5, 5.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=0))
+    fireflyes.append(FireFly(4, 9, 9, 6.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=10))
 
-    fireflyes[0].setNeighbours([fireflyes[1]])
-    fireflyes[1].setNeighbours([fireflyes[0]])
-    #fireflyes[2].setNeighbours([fireflyes[3]])
-    #fireflyes[3].setNeighbours([fireflyes[0]])
+    fireflyes[0].setNeighbours([fireflyes[1], fireflyes[2], fireflyes[3]])
+    fireflyes[1].setNeighbours([fireflyes[0], fireflyes[2], fireflyes[3]])
+    fireflyes[2].setNeighbours([fireflyes[3], fireflyes[0], fireflyes[1]])
+    fireflyes[3].setNeighbours([fireflyes[0], fireflyes[1], fireflyes[2]])
 
     return fireflyes
 

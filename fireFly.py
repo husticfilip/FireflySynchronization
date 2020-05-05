@@ -4,13 +4,14 @@ import time
 from display import update_plot
 
 global EVEN_ITERATION # flag which tells all fireflies if current iteration is even or odd
-                      # used when one firefly looks if it has set signals from other ff in
+                      # used when one firefly looks if it has new signals from other ff in
                       # previous iteration
-
-class FireFlyIterationStatus:
-    def __init__(self):
-        self.STAGE = Stage.WAITING_TO_START
-        self.iteration_signal_set = False
+##################################
+#      O  E  O  E  O  E  O  E       O-odd iteration    E-even iteration
+# FF1  2  1  B  -> this blink will effect FF2 in next iteration
+# FF2  5  4  3  ? -> since this iteration is Even, look if I got any signal on odd iteration
+#
+######################################
 
 
 class FireFly:
@@ -32,11 +33,13 @@ class FireFly:
         self.STAGE = Stage.WAITING_TO_START
         self.current_time_counting = self.period
         self.current_time_waiting = self.wait_time
-        self.blinked = False
         self.signal_flag = False
 
+        self.EVEN_ITERATION_STAGE = Stage.WAITING_TO_START # on what stage we were on last even iteration
+        self.ODD_ITERATION_STAGE = Stage.WAITING_TO_START  # on what stage we were on last odd iteration
         self.even_iteration_signal_set = False # has signal from some other ff been set on its even iteration
         self.odd_iteration_signal_set = False  # or has it been set on odd iteration
+
 
     def applyMove(self, time_step):
         if self.STAGE == Stage.WAITING_TO_START:
@@ -49,12 +52,27 @@ class FireFly:
         else:
             self.waitingFunction(time_step)
 
+        if EVEN_ITERATION:
+            self.EVEN_ITERATION_STAGE = self.STAGE
+        else:
+            self.ODD_ITERATION_STAGE = self.STAGE
+
+
     def waitingToStartFunction(self, time_step):
         self.start_delay -= time_step
         if self.start_delay <= 0:
             self.STAGE = Stage.COUNTING_DOWN
             self.current_time_counting += self.start_delay  # subtract time to start counting
 
+
+    #Here I am not sure what is smartest way do do counting
+    #
+    #What to do when:
+    # FF1 3 2 1 B
+    # FF2 4 3 2 1 -> here counter will go to 0 even without influence of blink from FF1,
+    #                do we then register that blink or not
+    #                do we subtract time from current_time_waiting with amount that blink sends us bellow 0
+    #
     def countingDownFunction(self, time_step):
         global EVEN_ITERATION
         if (EVEN_ITERATION and self.odd_iteration_signal_set) or (not EVEN_ITERATION and self.even_iteration_signal_set): # we need to look at signals from previous iteration
@@ -70,13 +88,9 @@ class FireFly:
         if self.current_time_counting<=0:
             self.blink()
             if not self.signal_flag:
-                self.period -= self.sub_period_fun(self.period)
+                self.period += self.add_period_fun(self.period)
 
-            self.signal_flag = False            # so next time we start counting all flags are set on False
-            self.odd_iteration_signal_set = False
-            self.even_iteration_signal_set = False
-
-            self.STAGE = Stage.BLINKED
+            self.STAGE = Stage.BLINKED  # stage so we can detect blink in iterator more easily
             self.current_time_waiting += self.current_time_counting
             self.current_time_counting = self.period
 
@@ -84,25 +98,31 @@ class FireFly:
     def waitingFunction(self, time_step):
         self.current_time_waiting -= time_step
         if self.current_time_waiting <= 0:
-            self.STAGE = Stage.COUNTING_DOWN
             self.current_time_counting += self.current_time_waiting
             self.current_time_waiting = self.wait_time
+
+            self.STAGE = Stage.COUNTING_DOWN
+            self.signal_flag = False            # reset flags for counting
+            self.odd_iteration_signal_set = False
+            self.even_iteration_signal_set = False
+
 
     def blink(self):
         global EVEN_ITERATION
         self.blinked = True
         for neighbour in self.neighbours:
-            if neighbour.STAGE == Stage.COUNTING_DOWN:
-                if EVEN_ITERATION:
+                if EVEN_ITERATION and neighbour.ODD_ITERATION_STAGE == Stage.COUNTING_DOWN: #if in previous iteration neighbour was counting -> send signal
                     neighbour.even_iteration_signal_set = True
-                else:
+                if not EVEN_ITERATION and neighbour.EVEN_ITERATION_STAGE == Stage.COUNTING_DOWN:
                     neighbour.odd_iteration_signal_set = True
+
 
     def setNeighbours(self, neigbours):
         if not isinstance(neigbours,list):
             raise ValueError("Set neighbours method takes in list of neighbours.")
         self.neighbours = neigbours
         self.half_of_neighbours = math.ceil (len(neigbours) / 2)
+
 
 
 
