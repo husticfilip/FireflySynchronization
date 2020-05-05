@@ -7,6 +7,12 @@ global EVEN_ITERATION # flag which tells all fireflies if current iteration is e
                       # used when one firefly looks if it has set signals from other ff in
                       # previous iteration
 
+class FireFlyIterationStatus:
+    def __init__(self):
+        self.STAGE = Stage.WAITING_TO_START
+        self.iteration_signal_set = False
+
+
 class FireFly:
 
     def __init__(self,id ,x_coord, y_coord, period, sub_time ,sub_period_fun, add_period_fun, wait_time, start_delay = 0):
