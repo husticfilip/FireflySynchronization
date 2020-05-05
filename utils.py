@@ -32,15 +32,15 @@ def generate_population_randomly():
 def generate_population_manualy():
     fireflyes = []
 
-    fireflyes.append(FireFly(1, 0, 0, 4, 2, expFunct(), 1))
-    fireflyes.append(FireFly(2, 1, 2, 3.5, 2,expFunct(), 1))
-    fireflyes.append(FireFly(3, 4, 5, 5.5, 2, expFunct(), 1))
-    fireflyes.append(FireFly(4, 9, 9, 6.5, 2, expFunct(), 1))
+    fireflyes.append(FireFly(1, 0, 0, 4, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=0))
+    fireflyes.append(FireFly(2, 1, 2, 2.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=1))
+    #fireflyes.append(FireFly(3, 4, 5, 5.5, 2, 1, 1))
+    #fireflyes.append(FireFly(4, 9, 9, 6.5, 2, 1, 1))
 
     fireflyes[0].setNeighbours([fireflyes[1]])
-    fireflyes[1].setNeighbours([fireflyes[2]])
-    fireflyes[2].setNeighbours([fireflyes[3]])
-    fireflyes[3].setNeighbours([fireflyes[0]])
+    fireflyes[1].setNeighbours([fireflyes[0]])
+    #fireflyes[2].setNeighbours([fireflyes[3]])
+    #fireflyes[3].setNeighbours([fireflyes[0]])
 
     return fireflyes
 
@@ -52,12 +52,16 @@ def generate_population_manualy():
 #
 ################################################
 
-def expFunct(A=4, b=-0.2):
+def expFunct(A=1, b=-0.2):
     def fun(x):
         return A * math.exp(b*x)
     return fun
 
 
+def contFunction(A=0.05):
+    def fun(x):
+        return A
+    return fun
 
 
 ################################################
