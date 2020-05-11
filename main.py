@@ -41,9 +41,9 @@ def main():
     t.join()
 
 def iteratingMain():
-    population = generate_population_manualy()
-    time_step = 0.5
-    max_time = 200
+    population = generate_population_randomly()
+    time_step = 0.1
+    max_time = 2000
     iterate(population, time_step, max_time)
 
 
