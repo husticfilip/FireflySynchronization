@@ -32,15 +32,27 @@ def generate_population_randomly():
 def generate_population_manualy():
     fireflyes = []
 
-    fireflyes.append(FireFly(1, 0, 0, 4, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=0))
-    fireflyes.append(FireFly(2, 1, 2, 2.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=1))
-    fireflyes.append(FireFly(3, 4, 5, 5.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=0))
-    fireflyes.append(FireFly(4, 9, 9, 6.5, 0.5, contFunction(0.5), contFunction(0.5), 1, start_delay=10))
+    fireflyes.append(FireFly(1, 0, 0, 2.5, 1, contFunction(0.2), contFunction(0.8), 0))
+    fireflyes.append(FireFly(2, 1, 2, 4, 1, contFunction(0.2), contFunction(0.8), 1))
+    fireflyes.append(FireFly(3, 4, 5, 5.5, 1, contFunction(0.2), contFunction(0.8), 0))
+    fireflyes.append(FireFly(4, 9, 9, 7, 1, contFunction(0.2), contFunction(0.8), 3.5))
+    #fireflyes.append(FireFly(5, 9, 9, 2.3, 0.5, contFunction(0.01), contFunction(0.1), 6))
+    #fireflyes.append(FireFly(6, 9, 9, 14.5, 0.5, contFunction(0.01), contFunction(0.1), 2))
+    #fireflyes.append(FireFly(7, 9, 9, 6.5, 0.5, contFunction(0.01), contFunction(0.1), 0))
 
-    fireflyes[0].setNeighbours([fireflyes[1], fireflyes[2], fireflyes[3]])
-    fireflyes[1].setNeighbours([fireflyes[0], fireflyes[2], fireflyes[3]])
-    fireflyes[2].setNeighbours([fireflyes[3], fireflyes[0], fireflyes[1]])
-    fireflyes[3].setNeighbours([fireflyes[0], fireflyes[1], fireflyes[2]])
+    for i in range(len(fireflyes)):
+        neigh = []
+        for j in range(len(fireflyes)):
+            if j != i:
+                neigh.append(fireflyes[j])
+        fireflyes[i].setNeighbours(neigh)
+
+
+
+    # fireflyes[0].setNeighbours([fireflyes[1], fireflyes[2], fireflyes[3]])
+    # fireflyes[1].setNeighbours([fireflyes[0], fireflyes[2], fireflyes[3]])
+    # fireflyes[2].setNeighbours([fireflyes[3], fireflyes[0], fireflyes[1]])
+    # fireflyes[3].setNeighbours([fireflyes[0], fireflyes[1], fireflyes[2]])
 
     return fireflyes
 

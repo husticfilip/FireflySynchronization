@@ -1,29 +1,38 @@
-from fireFlyStagesEnum import Stage
-import fireFly
+from fireFly import *
 
 def iterate(fireflyes, time_step = 0.1, max_time = 10):
     timer = 0
-    fireFly.EVEN_ITERATION = False # 1st iteration is odd
-    while(timer <= max_time):
-        for firefly in fireflyes:
-            firefly.applyMove(time_step)
+    while timer <= max_time:
+        if( abs(timer - 11) <= 0.01):
+            a = 1
+
+        for f in fireflyes:
+            f.applyMove(time_step)
 
         timer += time_step
-        fireFly.EVEN_ITERATION = False if fireFly.EVEN_ITERATION else True
+        changeStates(fireflyes)
         printFireflyesStates(fireflyes, timer)
+
+def changeStates(fireflyes):
+    for f in fireflyes:
+        f.previous_state, f.current_state, f.next_state = f.current_state, f.next_state, f.previous_state
 
 
 def printFireflyesStates(fireflies, timer):
     print("%.3f" % timer, end='      ')
 
     for firefly in fireflies:
-        if firefly.STAGE == Stage.WAITING_TO_START:
+        if firefly.current_state.STAGE == Stage.WAITING_TO_START:
             print(" X ",end='   ')
-        elif firefly.STAGE == Stage.COUNTING_DOWN:
-            print("%.3f" % firefly.current_time_counting, end='     ')
-        elif firefly.STAGE == Stage.BLINKED:
+        elif firefly.current_state.STAGE == Stage.COUNTING or firefly.current_state.STAGE == Stage.SWITCH_TO_COUNTING:
+            print("%.3f" % firefly.current_state.current_counter, end='     ')
+        elif firefly.current_state.STAGE == Stage.BLINKED:
             print(" B ", end='       ')
         else:
-            print("%.2fT" % firefly.current_time_waiting, end='     ')
+            print("%.2fT" % firefly.current_state.waiting_counter, end='     ')
+
+    print(      "Periods:", end= '   ')
+    for firefly in fireflies:
+        print("%.3f" % firefly.period, end='   ')
 
     print()

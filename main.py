@@ -42,8 +42,8 @@ def main():
 
 def iteratingMain():
     population = generate_population_manualy()
-    time_step = 0.1
-    max_time = 100
+    time_step = 0.5
+    max_time = 200
     iterate(population, time_step, max_time)
 
 
