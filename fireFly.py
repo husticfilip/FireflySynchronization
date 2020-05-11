@@ -20,7 +20,7 @@ class Firefly_State():
         self.num_received_signals = 0
 
 class FireFly():
-    def __init__(self,id, x_coord, y_coord, period, waiting_time, sub_time_fun, add_time_fun, start_delay = 0):
+    def __init__(self,id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun, add_time_fun, start_delay = 0):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -31,6 +31,7 @@ class FireFly():
         self.sub_time_fun = sub_time_fun
         self.got_signal_flag = False
         self.neigbours = []
+        self.period_threshold = period_threshold
 
         self.previous_state = Firefly_State(start_delay)
         self.current_state = Firefly_State(start_delay)
@@ -72,9 +73,13 @@ class FireFly():
             for i in range(previous_state.num_received_signals):
                 sub_value = self.sub_time_fun(self.period)
                 current_state.current_counter -= sub_value
-                self.period -= sub_value
+                if self.period > self.period_threshold:
+                    self.period -= sub_value
+                else:
+                    self.period = self.period_threshold
             self.got_signal_flag = True
             self.countingDownHelp(current_state, next_state)
+        
 
 
 
@@ -82,7 +87,7 @@ class FireFly():
         if current_state.current_counter <= 0:
             next_state.STAGE = Stage.BLINKED
             next_state.waiting_counter = self.waiting_time + current_state.current_counter
-            if not self.got_signal_flag:
+            if not self.got_signal_flag and self.period > self.period_threshold:
                 self.period += self.add_time_fun(self.period)
             self.got_signal_flag = False
             for n in self.neigbours:
@@ -94,7 +99,7 @@ class FireFly():
 
     def waiting(self,current_state, next_state, time_step):
         current_state.waiting_counter -= time_step
-        if current_state.waiting_counter <=0:
+        if current_state.waiting_counter <= 0:
             next_state.current_counter = self.period + current_state.waiting_counter
             next_state.STAGE = Stage.COUNTING
         else:
