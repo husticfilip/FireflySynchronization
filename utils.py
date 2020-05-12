@@ -18,7 +18,7 @@ def generate_population_randomly():
     period_domain = [params['PERIOD_MIN'], params['PERIOD_MAX']]
     latency = params['LATENCY'] # we can change so latency will also between some min and max value
     subtraction_time = params['SUBTRACTION_TIME'] # time we substract from counter if we get signal from other firefly
-    period_threshold = 1
+    period_threshold = 1.5
     coords = []
     for id in range(params['POP_SIZE']):
         x_coord = random.randint(0, x_max)
@@ -37,10 +37,10 @@ def generate_population_randomly():
 def generate_population_manualy():
     fireflyes = []
 
-    fireflyes.append(FireFly(1, 0, 0, 4, 1.5, 0.5, linearFunct(), linearFunct(), start_delay = 5))
-    fireflyes.append(FireFly(2, 1, 2, 3, 1.5, 0.5, linearFunct(), linearFunct(), start_delay = 1))
-    fireflyes.append(FireFly(3, 4, 5, 2.5, 1.5, 0.5, linearFunct(), linearFunct(), start_delay = 3))
-    fireflyes.append(FireFly(4, 9, 9, 7, 1.5, 0.5, linearFunct(), linearFunct(), start_delay = 7))
+    fireflyes.append(FireFly(1, 0, 0, 4, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 5))
+    fireflyes.append(FireFly(2, 1, 2, 3, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 1))
+    fireflyes.append(FireFly(3, 4, 5, 2.5, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 3))
+    fireflyes.append(FireFly(4, 9, 9, 7, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 7))
 
     fireflyes[0].setNeighbours([fireflyes[1], fireflyes[2], fireflyes[3]])
     fireflyes[1].setNeighbours([fireflyes[0], fireflyes[2], fireflyes[3]])

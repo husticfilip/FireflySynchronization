@@ -1,4 +1,5 @@
 from enum import Enum
+import math
 
 class Stage(Enum):
     WAITING_TO_START = 0
@@ -29,8 +30,9 @@ class FireFly():
         self.waiting_time = waiting_time
         self.add_time_fun = add_time_fun
         self.sub_time_fun = sub_time_fun
-        self.got_signal_flag = False
+        self.got_signal_count = 0
         self.neigbours = []
+        self.half_of_neighbours = 0
         self.period_threshold = period_threshold
 
         self.previous_state = Firefly_State(start_delay)
@@ -43,7 +45,7 @@ class FireFly():
         if current_state.STAGE == Stage.WAITING_TO_START:
             self.waitToStart(current_state, next_state, time_step)
         elif current_state.STAGE == Stage.SWITCH_TO_COUNTING:
-            previous_state.resetSignals()            ## if we got signal while waiting it shoudln't effect next iteration
+            previous_state.resetSignals()
             self.countingDown(current_state, previous_state, next_state, time_step)
         elif current_state.STAGE == Stage.COUNTING:
             self.countingDown(current_state, previous_state, next_state, time_step)
@@ -65,19 +67,17 @@ class FireFly():
 
     def countingDown(self, current_state, previous_state, next_state, time_step):
         current_state.current_counter -= time_step
+        self.got_signal_count += previous_state.num_received_signals
         self.countingDownHelp(current_state, next_state)
         if current_state.current_counter <= 0:
             return
 
-        if previous_state.num_received_signals > 0:
-            for i in range(previous_state.num_received_signals):
-                sub_value = self.sub_time_fun(self.period)
-                current_state.current_counter -= sub_value
-                if self.period > self.period_threshold:
-                    self.period -= sub_value
-                else:
-                    self.period = self.period_threshold
-            self.got_signal_flag = True
+        if self.period < self.period_threshold:
+            self.period = self.period_threshold
+        elif previous_state.num_received_signals > 0:
+            sub_value = self.sub_time_fun(self.period)
+            current_state.current_counter -= sub_value
+            self.period -= sub_value
             self.countingDownHelp(current_state, next_state)
         
 
@@ -87,9 +87,9 @@ class FireFly():
         if current_state.current_counter <= 0:
             next_state.STAGE = Stage.BLINKED
             next_state.waiting_counter = self.waiting_time + current_state.current_counter
-            if not self.got_signal_flag and self.period > self.period_threshold:
+            if self.got_signal_count < self.half_of_neighbours:
                 self.period += self.add_time_fun(self.period)
-            self.got_signal_flag = False
+            self.got_signal_count = 0
             for n in self.neigbours:
                 n.current_state.num_received_signals += 1
         else:
@@ -112,3 +112,4 @@ class FireFly():
             self.neigbours = [neighbours]
         else:
             self.neigbours = neighbours
+        self.half_of_neighbours = math.ceil(len(self.neigbours))

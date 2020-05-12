@@ -3,7 +3,7 @@ from fireFly import *
 def iterate(fireflyes, time_step = 0.1, max_time = 10):
     timer = 0
     while timer <= max_time:
-        if( abs(timer - 11) <= 0.01):
+        if( abs(timer - 94.2) <= 0.01):
             a = 1
 
         for f in fireflyes:
