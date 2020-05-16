@@ -1,6 +1,7 @@
 from enum import Enum
 import math
 
+
 class Stage(Enum):
     WAITING_TO_START = 0
     SWITCH_TO_COUNTING = 1
@@ -20,8 +21,10 @@ class Firefly_State():
     def resetSignals(self):
         self.num_received_signals = 0
 
+
 class FireFly():
-    def __init__(self,id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun, add_time_fun, start_delay = 0):
+    def __init__(self, id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun, add_time_fun,
+                 start_delay=0):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -39,7 +42,6 @@ class FireFly():
         self.current_state = Firefly_State(start_delay)
         self.next_state = Firefly_State(start_delay)
 
-
     def applyMove(self, time_step):
         current_state, next_state, previous_state = self.current_state, self.next_state, self.previous_state
         if current_state.STAGE == Stage.WAITING_TO_START:
@@ -54,8 +56,7 @@ class FireFly():
 
         next_state.resetSignals()
 
-
-    def waitToStart(self,current_state, next_state, time_step):
+    def waitToStart(self, current_state, next_state, time_step):
         current_state.start_counter -= time_step
         if (current_state.start_counter <= 0):
             next_state.STAGE = Stage.SWITCH_TO_COUNTING
@@ -63,7 +64,6 @@ class FireFly():
         else:
             next_state.start_counter = current_state.start_counter
             next_state.STAGE = Stage.WAITING_TO_START
-
 
     def countingDown(self, current_state, previous_state, next_state, time_step):
         current_state.current_counter -= time_step
@@ -79,8 +79,6 @@ class FireFly():
             current_state.current_counter -= sub_value
             self.period -= sub_value
             self.countingDownHelp(current_state, next_state)
-        
-
 
 
     def countingDownHelp(self, current_state, next_state):
@@ -96,8 +94,7 @@ class FireFly():
             next_state.current_counter = current_state.current_counter
             next_state.STAGE = Stage.COUNTING
 
-
-    def waiting(self,current_state, next_state, time_step):
+    def waiting(self, current_state, next_state, time_step):
         current_state.waiting_counter -= time_step
         if current_state.waiting_counter <= 0:
             next_state.current_counter = self.period + current_state.waiting_counter
@@ -105,7 +102,6 @@ class FireFly():
         else:
             next_state.waiting_counter = current_state.waiting_counter
             next_state.STAGE = Stage.WAITING
-
 
     def setNeighbours(self, neighbours):
         if not isinstance(neighbours, list):

@@ -43,7 +43,7 @@ def main():
 def iteratingMain():
     population = generate_population_randomly()
     time_step = 0.1
-    max_time = 2000
+    max_time = 5000
     iterate(population, time_step, max_time)
 
 
