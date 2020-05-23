@@ -4,6 +4,7 @@ from parameters import params, experimentation
 from sklearn.neighbors import KDTree
 from fireFly import FireFly
 import numpy as np
+import turtle
 
 
 #############################################
@@ -21,13 +22,19 @@ def generate_population_randomly():
     period_threshold = 0.0
     coords = []
     for id in range(params['POP_SIZE']):
+        t = turtle.Turtle(shape="circle")
+        t.shapesize(0.5,0.5)
         x_coord = random.randint(0, x_max)
         y_coord = random.randint(0,y_max)
+        t.hideturtle()
+        t.up()
+        t.goto((x_coord, y_coord))
+        t.showturtle()
         coords.append([x_coord, y_coord])
-        latency = random.randint(0,latency)
+        latency = 0#random.randint(0,10)
         period = random.uniform(period_domain[0], period_domain[1])
         waiting_time = 1
-        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.1), expFunct(0.1,-1), latency))
+        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01,-1), latency, t))
 
     find_n_nearest_neighbours(population, coords)
 

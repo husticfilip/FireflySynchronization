@@ -3,6 +3,7 @@ import time
 from utils import  *
 from display import *
 from iterator import *
+import turtle
 
 """
 NOTES
@@ -41,6 +42,10 @@ def main():
     t.join()
 
 def iteratingMain():
+    screen = turtle.Screen()
+    screen.setup(700,700,startx=0, starty=0)
+    screen.setworldcoordinates(0,0,params["Y_MAX"] + 2,params["X_MAX"] + 2)
+    screen.title("Synchronized Fireflies")
     population = generate_population_randomly()
     time_step = 0.1
     max_time = 5000
