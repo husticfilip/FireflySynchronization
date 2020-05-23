@@ -24,7 +24,7 @@ class Firefly_State():
 
 class FireFly():
     def __init__(self, id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun, add_time_fun,
-                 start_delay=0):
+                 start_delay=0, turtle = None):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -37,6 +37,7 @@ class FireFly():
         self.neigbours = []
         self.half_of_neighbours = 0
         self.period_threshold = period_threshold
+        self.turtle = turtle
 
         self.previous_state = Firefly_State(start_delay)
         self.current_state = Firefly_State(start_delay)

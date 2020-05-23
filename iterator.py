@@ -1,4 +1,5 @@
 from fireFly import *
+from display import *
 
 def iterate(fireflyes, time_step = 0.1, max_time = 10):
     timer = 0
@@ -25,9 +26,12 @@ def printFireflyesStates(fireflies, timer):
         if firefly.current_state.STAGE == Stage.WAITING_TO_START:
             print(" X ",end='   ')
         elif firefly.current_state.STAGE == Stage.COUNTING or firefly.current_state.STAGE == Stage.SWITCH_TO_COUNTING:
+            firefly.turtle.fillcolor("black")
             print("%.3f" % firefly.current_state.current_counter, end='     ')
         elif firefly.current_state.STAGE == Stage.BLINKED:
             print(" B ", end='       ')
+            firefly.turtle.fillcolor("yellow")
+            # FIXME if I remove the color on the waiting time, it blinks too fast
         else:
             print("%.2fT" % firefly.current_state.waiting_counter, end='     ')
 
