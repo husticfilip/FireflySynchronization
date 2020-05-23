@@ -24,10 +24,10 @@ def generate_population_randomly():
         x_coord = random.randint(0, x_max)
         y_coord = random.randint(0,y_max)
         coords.append([x_coord, y_coord])
-        latency = 0#random.randint(0,10)
+        latency = random.randint(0,latency)
         period = random.uniform(period_domain[0], period_domain[1])
         waiting_time = 1
-        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01,-1), latency))
+        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.1), expFunct(0.1,-1), latency))
 
     find_n_nearest_neighbours(population, coords)
 
