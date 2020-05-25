@@ -72,7 +72,7 @@ def generate_population_randomly_grid():
 
     for ff in population:
         ff.setNeighbours(get_neighbours(ff, population))
-    # find_n_nearest_neighbours(population, coords)
+        #find_n_nearest_neighbours(population, coords)
 
     return population
 

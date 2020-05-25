@@ -48,12 +48,11 @@ def iteratingMain():
     # screen.setworldcoordinates(0,0,params["Y_MAX"],params["X_MAX"])
     # screen.title("Synchronized Fireflies")
     population = generate_population_randomly_grid()
-    time_step = 0.5
-    max_time = 1000
+    time_step = 0.1
+    max_time = 5000
     iterate(population, time_step, max_time)
 
 if __name__ == "__main__":
     for _ in range(experimentation['NR_EXP']):
         #main()
-        #iteratingMain()
-        test()
+        iteratingMain()

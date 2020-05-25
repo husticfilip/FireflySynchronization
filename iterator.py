@@ -10,7 +10,9 @@ def iterate(fireflyes, time_step = 0.1, max_time = 10):
 
         timer += time_step
         changeStates(fireflyes)
-        printFireflyesStates(fireflyes, timer)
+
+        if timer >= 2500:
+            printFireflyesStates(fireflyes, timer)
     plt.show()
 
 def changeStates(fireflyes):
@@ -49,7 +51,7 @@ def printFireflyesStates(fireflies, timer):
     plt.ylim(0.5, params['Y_MAX'])
     plt.scatter(x_,y_,c="black")
     plt.scatter(x_blink,y_blink,c="red")
-    plt.pause(0.01)
+    plt.pause(0.1)
 
     print("Periods:", end='   ')
     for firefly in fireflies:
