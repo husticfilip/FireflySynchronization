@@ -22,32 +22,8 @@ THINK ABOUT THIS:
 # Function to load population, from json
 
 
-def main():
-    threads = []
-    population = generate_population_manualy()
-    display_population(population)
-
-    for firefly in population:
-        t = threading.Thread(target=firefly.run2)
-        t.setDaemon(True)
-        threads.append(t)
-
-    for worker in threads:
-        worker.start()
-        time.sleep(2) #TODO remove magic number later
-
-    for _ in range(params["SIMULATION_TIME"]):
-        plt.pause(0.5)
-        update_plot(population)
-    plt.show()
-    t.join()
-
 def iteratingMain():
-    # screen = turtle.Screen()
-    # screen.setup(700,700,startx=0, starty=0)
-    # screen.setworldcoordinates(0,0,params["Y_MAX"],params["X_MAX"])
-    # screen.title("Synchronized Fireflies")
-    population = generate_population_randomly_grid()
+    population = generate_population_two_grops_different_periods()
     time_step = 0.1
     max_time = 5000
     iterate(population, time_step, max_time)

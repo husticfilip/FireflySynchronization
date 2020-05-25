@@ -12,34 +12,6 @@ import turtle
 #   DIFFERENT WAYS TO GENERATE POPULATION
 #
 #############################################
-def generate_population_randomly():
-    population = []
-    x_max = params['X_MAX']
-    y_max = params['Y_MAX']
-    period_domain = [params['PERIOD_MIN'], params['PERIOD_MAX']]
-    latency = params['LATENCY'] # we can change so latency will also between some min and max value
-    subtraction_time = params['SUBTRACTION_TIME'] # time we substract from counter if we get signal from other firefly
-    period_threshold = 0.0
-    coords = []
-    for id in range(params['POP_SIZE']):
-        t = turtle.Turtle(shape="circle")
-        t.shapesize(0.5,0.5)
-        x_coord = random.randint(0, x_max)
-        y_coord = random.randint(0,y_max)
-        t.hideturtle()
-        t.up()
-        t.goto((x_coord, y_coord))
-        t.showturtle()
-        coords.append([x_coord, y_coord])
-        latency = 0#random.randint(0,10)
-        period = random.uniform(period_domain[0], period_domain[1])
-        waiting_time = 1
-        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01,-1), latency, t))
-
-    find_n_nearest_neighbours(population, coords)
-
-    return population
-
 def generate_population_randomly_grid():
     x_max = params['X_MAX']
     y_max = params['Y_MAX']
@@ -76,20 +48,29 @@ def generate_population_randomly_grid():
 
     return population
 
-def generate_population_manualy():
-    fireflyes = []
 
-    fireflyes.append(FireFly(1, 0, 0, 4, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 5))
-    fireflyes.append(FireFly(2, 1, 2, 3, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 1))
-    fireflyes.append(FireFly(3, 4, 5, 2.5, 1.5, 0.5, linearFunct(0.05), expFunct(0.1,-1), start_delay = 3))
-    fireflyes.append(FireFly(4, 9, 9, 7, 1.5, 0.5, linearFunct(0.05), expFunct(5,-1), start_delay = 7))
+def generate_population_two_grops_different_periods():
+    population = []
+    id = 0
 
-    fireflyes[0].setNeighbours([fireflyes[1], fireflyes[2], fireflyes[3]])
-    fireflyes[1].setNeighbours([fireflyes[0], fireflyes[2], fireflyes[3]])
-    fireflyes[2].setNeighbours([fireflyes[3], fireflyes[0], fireflyes[1]])
-    fireflyes[3].setNeighbours([fireflyes[0], fireflyes[1], fireflyes[2]])
+    for x in range(2, 5):
+        for y in range(4, 7):
+            population.append(gen_firefly(id, x, y, [5, 10]))
+            id += 1
 
-    return fireflyes
+    for x in range(8,11):
+        for y in range(4, 7):
+            population.append(gen_firefly(id, x, y, [100, 200]))
+            id += 1
+
+    for ff in population:
+        ff.setNeighbours(get_neighbours(ff, population))
+
+    return population
+
+def gen_firefly(id, x_coord, y_coord, period_domain):
+    return FireFly(id, x_coord, y_coord, random.uniform(period_domain[0], period_domain[1]), period_threshold=0,
+                   waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0)
 
 
 ################################################

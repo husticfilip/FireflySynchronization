@@ -11,7 +11,7 @@ def iterate(fireflyes, time_step = 0.1, max_time = 10):
         timer += time_step
         changeStates(fireflyes)
 
-        if timer >= 2500:
+        if timer >= 500:
             printFireflyesStates(fireflyes, timer)
     plt.show()
 
