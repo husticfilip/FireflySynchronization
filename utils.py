@@ -40,6 +40,41 @@ def generate_population_randomly():
 
     return population
 
+def generate_population_randomly_grid():
+    x_max = params['X_MAX']
+    y_max = params['Y_MAX']
+    empty_cells = [(x, y) for y in range(y_max) for x in range(x_max)]
+
+    if x_max * y_max <= params["POP_SIZE"]:
+        print("Not enough size on the grid for the chosen number of fireflies")
+
+    population = []
+    period_domain = [params['PERIOD_MIN'], params['PERIOD_MAX']]
+    latency = params['LATENCY'] # we can change so latency will also between some min and max value
+    subtraction_time = params['SUBTRACTION_TIME'] # time we substract from counter if we get signal from other firefly
+    period_threshold = 0.0
+    coords = []
+    for id in range(params['POP_SIZE']):
+        # t = turtle.Turtle(shape="circle")
+        # t.shapesize(0.5,0.5)
+        t = None
+        x_coord, y_coord = empty_cells.pop(random.randint(0,len(empty_cells)-1))
+
+        # t.hideturtle()
+        # t.up()
+        # t.goto((x_coord, y_coord))
+        # t.showturtle()
+        coords.append([x_coord, y_coord])
+        latency = 0 #random.randint(0,10)
+        period = random.uniform(period_domain[0], period_domain[1])
+        waiting_time = 1
+        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01,-1), latency, turtle=t))
+
+    for ff in population:
+        ff.setNeighbours(get_neighbours(ff, population))
+    # find_n_nearest_neighbours(population, coords)
+
+    return population
 
 def generate_population_manualy():
     fireflyes = []
@@ -98,4 +133,12 @@ def find_n_nearest_neighbours(fireflyes, X):
                 neighbours.append(fireflyes[j])
         fireflyes[i].setNeighbours(neighbours)
 
-
+def get_neighbours(firefly, fireflies):
+    neighbors = []
+    for f in fireflies:
+        if f.id != firefly.id:
+            dx = abs(firefly.x_coord - f.x_coord)
+            dy = abs(firefly.y_coord - f.y_coord)
+            if dx <= params["NEIGHBOURS_DIST"] * math.sqrt(2) and dy <= params["NEIGHBOURS_DIST"] * math.sqrt(2):
+                neighbors.append(f)
+    return neighbors
