@@ -4,6 +4,7 @@ from utils import  *
 from display import *
 from iterator import *
 import turtle
+import numpy
 
 """
 NOTES
@@ -51,8 +52,8 @@ def iteratingMain():
     max_time = 5000
     iterate(population, time_step, max_time)
 
-
 if __name__ == "__main__":
     for _ in range(experimentation['NR_EXP']):
         #main()
-        iteratingMain()
+        #iteratingMain()
+        test()

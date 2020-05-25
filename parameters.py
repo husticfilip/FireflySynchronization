@@ -7,7 +7,7 @@ experimentation = {
 
 
 params = {
-    'POP_SIZE': 30,
+    'POP_SIZE': 10,
     'POSITION_MODE': 0,
     'BLINKING_TIME': 2,
     'SIMULATION_TIME': 100,

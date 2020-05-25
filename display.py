@@ -20,3 +20,4 @@ def update_plot(population):
 
     plt.scatter(x_off ,y_off, c="black")
     plt.scatter(x_on, y_on, c="red")
+
