@@ -5,6 +5,7 @@ from display import *
 from iterator import *
 import turtle
 import numpy
+from parameters import params
 
 """
 NOTES
@@ -18,17 +19,12 @@ THINK ABOUT THIS:
 
 """
 
-#TODO: function to save population
-# Function to load population, from json
-
-
 def iteratingMain():
-    population = generate_population_two_grops_different_periods()
+    population = generate_population()
     time_step = 0.1
-    max_time = 5000
-    iterate(population, time_step, max_time)
+    max_time = params['SIMULATION_TIME']
+    saveIterator(population, time_step, max_time)
 
 if __name__ == "__main__":
     for _ in range(experimentation['NR_EXP']):
-        #main()
         iteratingMain()
