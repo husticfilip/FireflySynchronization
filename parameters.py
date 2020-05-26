@@ -7,11 +7,12 @@ experimentation = {
 
 
 params = {
-    'SCENARIO': 'PROBABILITY',
+    'SCENARIO': 'FOUR_GROUPS_WITH_BRIDGE',
     'POP_SIZE': 20,
     'POSITION_MODE': 0,
     'BLINKING_TIME': 2,
     'SIMULATION_TIME': 10000,
+    'PLOT_BLINKING_OF_LAST_PERIODS': 15,
     'PERIOD_MIN': 1,
     'PERIOD_MAX': 20,
     'LATENCY': 5,

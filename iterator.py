@@ -19,7 +19,8 @@ def iterate(fireflyes, time_step = 0.1, max_time = 10):
 
 
 def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
-    display_population(fireflyes)
+    plot_blinking_after = max_time - params['PLOT_BLINKING_OF_LAST_PERIODS']
+    #display_population(fireflyes)
     ff_periods = [[] for i in range(len(fireflyes))]
     ff_blinked = [[] for i in range(len(fireflyes))]
 
@@ -29,27 +30,36 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
             f.applyMove(time_step)
 
         for i,ff in enumerate(fireflyes):
-            ff_periods[i].append(ff.period)   
-            if ff.current_state.STAGE == Stage.BLINKED and timer >=9970 and timer <= 9999:
-                ff_blinked[i].append((timer,1))
-            else:
-                ff_blinked[i].append((timer,0))
+            ff_periods[i].append(ff.period)
+            if timer >=plot_blinking_after:
+                if ff.current_state.STAGE == Stage.BLINKED:
+                    ff_blinked[i].append((timer,1))
+                else:
+                    ff_blinked[i].append((timer,0))
             
         timer += time_step
         changeStates(fireflyes)
-        if timer >= 9960:
-            printFireflyesStates(fireflyes, timer)
+        #if timer >= 9970:
+        #     printFireflyesStates(fireflyes, timer)
     plotStuff(ff_periods, ff_blinked, time_step, timer)
 
 
 def plotStuff(ff_periods, ff_blinked, time_step, max):
     plt.figure(1)
+    plt.xlabel('Time step')
+    plt.ylabel('Fireflyes periods')
     colors = iter(cm.rainbow(np.linspace(0, 1, len(ff_blinked))))
     x = [i for i in np.arange(time_step,max,time_step)]
     for i in range(len(ff_periods)):
         plt.scatter(x,ff_periods[i],s=1, color=next(colors))
-    
+
+
+
     plt.figure(2)
+    plt.xlabel('Time step')
+    plt.ylabel('Fireflyes')
+    plt.yticks(np.arange(1, len(ff_blinked) + 1, 1))
+    plt.grid(axis='y', linestyle='-')
     plt.ylim(0, len(ff_periods) + 1)
     y = 0
     # rainbow

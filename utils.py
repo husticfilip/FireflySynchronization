@@ -60,7 +60,7 @@ def generate_population_two_groups_different_periods():
     for x in range(10,13):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [20, 30]))
+                population.append(gen_firefly(id, x, y, [100, 105]))
                 id += 1
             flag = not flag
         flag = not flag
@@ -87,7 +87,7 @@ def generate_population_two_groups_with_bridge():
     for x in range(10,13):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [20, 30]))
+                population.append(gen_firefly(id, x, y, [100, 105]))
                 id += 1
             flag = not flag
         flag = not flag
@@ -97,10 +97,103 @@ def generate_population_two_groups_with_bridge():
     population.append(gen_firefly(id, 7, 7, [5, 30]))
     id += 1
     population.append(gen_firefly(id, 9, 7, [5, 30]))
-    # id += 1
-    # population.append(gen_firefly(id, 6, 8, [5, 30]))
-    # id += 1
-    # population.append(gen_firefly(id, 8, 8, [5, 30]))
+    id += 1
+    population.append(gen_firefly(id, 6, 8, [5, 30]))
+    id += 1
+    population.append(gen_firefly(id, 8, 8, [5, 30]))
+    for ff in population:
+        ff.setNeighbours(get_neighbours(ff, population))
+
+    return population
+
+def generate_population_four_groups_different_periods():
+    population = []
+    id = 0
+    flag = True
+
+    for x in range(3, 6):
+        for y in range(3, 6):
+            if flag:
+                population.append(gen_firefly(id, x, y, [5, 10]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(3, 6):
+        for y in range(9, 12):
+            if flag:
+                population.append(gen_firefly(id, x, y, [100, 105]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(9, 12):
+        for y in range(9, 12):
+            if flag:
+                population.append(gen_firefly(id, x, y, [200, 205]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(9, 12):
+        for y in range(3, 6):
+            if flag:
+                population.append(gen_firefly(id, x, y, [300, 305]))
+                id += 1
+            flag = not flag
+
+
+    for ff in population:
+        ff.setNeighbours(get_neighbours(ff, population))
+
+    return population
+
+
+def generate_population_four_groups_with_bridge():
+    population = []
+    id = 0
+    flag = True
+
+    for x in range(3, 6):
+        for y in range(3, 6):
+            if flag:
+                population.append(gen_firefly(id, x, y, [5, 10]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(3, 6):
+        for y in range(9, 12):
+            if flag:
+                population.append(gen_firefly(id, x, y, [100, 105]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(9, 12):
+        for y in range(9, 12):
+            if flag:
+                population.append(gen_firefly(id, x, y, [200, 205]))
+                id += 1
+            flag = not flag
+
+    flag = True
+    for x in range(9, 12):
+        for y in range(3, 6):
+            if flag:
+                population.append(gen_firefly(id, x, y, [300, 305]))
+                id += 1
+            flag = not flag
+
+    # Bridge, in the middle of groups
+    flag = True
+    for x in range(6, 9):
+        for y in range(6, 9):
+            if flag:
+                population.append(gen_firefly(id, x, y, [5, 305]))
+                id += 1
+            flag = not flag
+
     for ff in population:
         ff.setNeighbours(get_neighbours(ff, population))
 
@@ -134,7 +227,10 @@ def generate_population():
         return generate_population_randomly_grid()
     elif params['SCENARIO'].upper() == 'PROBABILITY':
         return generate_population_with_probability()
-
+    elif params['SCENARIO'].upper() == 'FOUR_GROUPS_DIFF_PERIODS':
+        return generate_population_four_groups_different_periods()
+    elif params['SCENARIO'].upper() == 'FOUR_GROUPS_WITH_BRIDGE':
+        return generate_population_four_groups_with_bridge()
     else:
         raise Exception("Provided scenario not defined, change param 'SCENARIO'")
 
