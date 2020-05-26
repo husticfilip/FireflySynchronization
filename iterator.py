@@ -20,28 +20,57 @@ def iterate(fireflyes, time_step = 0.1, max_time = 10):
 
 def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
     plot_blinking_after = max_time - params['PLOT_BLINKING_OF_LAST_PERIODS']
-    #display_population(fireflyes)
+    display_population(fireflyes)
     ff_periods = [[] for i in range(len(fireflyes))]
     ff_blinked = [[] for i in range(len(fireflyes))]
+    ffs_stable = [[0,0,False] for i in range(len(fireflyes))] # (iteration_of_last_blink, how_many_iteraions_it_took_to_blink, is ff stable )
 
     timer = 0
+    iteration = 0
     while abs(max_time - timer ) >= 0.0001:
         for f in fireflyes:
             f.applyMove(time_step)
 
+        changeStates(fireflyes)
+        # if timer >= 4900:
+        #     printFireflyesStates(fireflyes, timer)
+
         for i,ff in enumerate(fireflyes):
             ff_periods[i].append(ff.period)
-            if timer >=plot_blinking_after:
+
+            if ff.current_state.STAGE == Stage.BLINKED:
+                is_ff_Stable(ffs_stable[i], iteration)
+
+            if timer >= plot_blinking_after:
                 if ff.current_state.STAGE == Stage.BLINKED:
-                    ff_blinked[i].append((timer,1))
+                    ff_blinked[i].append((timer, 1))
                 else:
-                    ff_blinked[i].append((timer,0))
-            
+                    ff_blinked[i].append((timer, 0))
+
+        if is_sistem_stable(ffs_stable):
+            print("System reached stability at ", timer)
+
         timer += time_step
-        changeStates(fireflyes)
-        #if timer >= 9970:
-        #     printFireflyesStates(fireflyes, timer)
+        iteration += 1
+
     plotStuff(ff_periods, ff_blinked, time_step, timer)
+
+def is_sistem_stable(ffs_stable):
+    for ff in ffs_stable:
+        if ff[2] == False:
+            return False
+    return True
+
+
+def is_ff_Stable(ff_stability, iteration):
+    iterations_taken_to_blink = iteration - ff_stability[0]
+    if iterations_taken_to_blink == ff_stability[1] or iterations_taken_to_blink == (ff_stability[1]-1) or iterations_taken_to_blink == (ff_stability[1]+1):
+        ff_stability[2] = True
+    else:
+        ff_stability[2] = False
+
+    ff_stability[0] = iteration #  iteration on which ff blinked
+    ff_stability[1] = iterations_taken_to_blink # how many iterations it took ff to blink this time
 
 
 def plotStuff(ff_periods, ff_blinked, time_step, max):
@@ -52,8 +81,6 @@ def plotStuff(ff_periods, ff_blinked, time_step, max):
     x = [i for i in np.arange(time_step,max,time_step)]
     for i in range(len(ff_periods)):
         plt.scatter(x,ff_periods[i],s=1, color=next(colors))
-
-
 
     plt.figure(2)
     plt.xlabel('Time step')
@@ -75,6 +102,9 @@ def plotStuff(ff_periods, ff_blinked, time_step, max):
                 plt.scatter(timer,y, color = color)
 
     plt.show()
+
+
+
 
 def changeStates(fireflyes):
     for f in fireflyes:
