@@ -50,7 +50,7 @@ def generate_population_two_groups_different_periods():
     for x in range(3, 6):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 10], 0))
+                population.append(gen_firefly(id, x, y, [5, 100], 0))
                 id += 1
             flag = not flag
         flag = not flag

@@ -7,7 +7,7 @@ experimentation = {
 
 
 params = {
-    'SCENARIO': 'FOUR_GROUPS_DIFF_PERIODS',
+    'SCENARIO': 'TWO_GROUPS_DIFF_PERIODS',
     'POP_SIZE': 4,
     'POSITION_MODE': 0,
     'BLINKING_TIME': 2,
@@ -19,6 +19,6 @@ params = {
     'SUBTRACTION_TIME': 1,
     'X_MAX': 15,
     'Y_MAX': 15,
-    'MOORE_DIST': 3,
+    'MOORE_DIST': 4,
     'FILE': 'scenarioD.json'
 }
