@@ -7,17 +7,18 @@ experimentation = {
 
 
 params = {
-    'SCENARIO': 'TWO_GROUPS_WITH_BRIDGE',
-    'POP_SIZE': 20,
+    'SCENARIO': 'FOUR_GROUPS_WITH_BRIDGE',
+    'POP_SIZE': 4,
     'POSITION_MODE': 0,
     'BLINKING_TIME': 2,
-    'SIMULATION_TIME': 8000,
-    'PLOT_BLINKING_OF_LAST_PERIODS': 15,
+    'SIMULATION_TIME': 20000,
+    'PLOT_BLINKING_OF_LAST_PERIODS': 20,
     'PERIOD_MIN': 1,
     'PERIOD_MAX': 20,
     'LATENCY': 5,
     'SUBTRACTION_TIME': 1,
     'X_MAX': 15,
     'Y_MAX': 15,
-    'NEIGHBOURS_DIST': 3
+    'MOORE_DIST': 3,
+    'FILE': 'scenarioD.json'
 }

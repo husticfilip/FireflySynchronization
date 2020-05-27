@@ -36,13 +36,12 @@ def generate_population_randomly_grid():
         lat = random.randint(0,latency)
         period = random.uniform(period_domain[0], period_domain[1])
         waiting_time = 1
-        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01,-1), lat))
+        population.append(FireFly(id,x_coord, y_coord, period, period_threshold,waiting_time, linearFunct(0.01), expFunct(0.01, -1), lat))
 
     for ff in population:
         ff.setNeighbours(get_neighbours(ff, population))
 
     return population
-
 
 def generate_population_two_groups_different_periods():
     population = []
@@ -70,7 +69,6 @@ def generate_population_two_groups_different_periods():
 
     return population
 
-
 def generate_population_two_groups_with_bridge():
     population = []
     id = 0
@@ -87,11 +85,10 @@ def generate_population_two_groups_with_bridge():
     for x in range(10,13):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [100, 105]))
+                population.append(gen_firefly(id, x, y, [25, 30]))
                 id += 1
             flag = not flag
         flag = not flag
-
     population.append(gen_firefly(id, 5, 7, [5, 30]))
     id += 1
     population.append(gen_firefly(id, 7, 7, [5, 30]))
@@ -101,6 +98,7 @@ def generate_population_two_groups_with_bridge():
     population.append(gen_firefly(id, 6, 8, [5, 30]))
     id += 1
     population.append(gen_firefly(id, 8, 8, [5, 30]))
+
     for ff in population:
         ff.setNeighbours(get_neighbours(ff, population))
 
@@ -147,7 +145,6 @@ def generate_population_four_groups_different_periods():
         ff.setNeighbours(get_neighbours(ff, population))
 
     return population
-
 
 def generate_population_four_groups_with_bridge():
     population = []
@@ -199,13 +196,12 @@ def generate_population_four_groups_with_bridge():
 
     return population
 
-
 def generate_population_with_probability():
     population = []
     id = 0
     for x in range(0, params["X_MAX"]):
         for y in range(0, params["Y_MAX"]):
-            if random.random() < 0.1:
+            if random.random() < 0.5:
                 population.append(gen_firefly(id, x, y, [5, 30]))
                 id += 1
     return population
@@ -214,7 +210,6 @@ def generate_population_with_probability():
 def gen_firefly(id, x_coord, y_coord, period_domain):
     return FireFly(id, x_coord, y_coord, random.uniform(period_domain[0], period_domain[1]), period_threshold=0,
                    waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0)
-
 
 
 def generate_population():
@@ -265,16 +260,6 @@ def contFunction(A=0.05):
 ################################################
 
 
-def find_n_nearest_neighbours(fireflyes, X):
-    neighbours = []
-    X = np.array(X)
-    tree = KDTree(X, leaf_size=2)
-    for i in range(len(fireflyes)):
-        _ , ind = tree.query([X[i]], k=params['N_NEIGHBOURS'] + 1)
-        for j in ind[0]:
-            if j != i:
-                neighbours.append(fireflyes[j])
-        fireflyes[i].setNeighbours(neighbours)
 
 def get_neighbours(firefly, fireflies):
     neighbors = []
@@ -282,7 +267,7 @@ def get_neighbours(firefly, fireflies):
         if f.id != firefly.id:
             dx = abs(firefly.x_coord - f.x_coord)
             dy = abs(firefly.y_coord - f.y_coord)
-            if dx <= params["NEIGHBOURS_DIST"] * math.sqrt(2) and dy <= params["NEIGHBOURS_DIST"] * math.sqrt(2):
+            if dx <= params["MOORE_DIST"] and dy <= params["MOORE_DIST"]:
                 neighbors.append(f)
     return neighbors
 
@@ -290,12 +275,15 @@ def save_scenario(fireflies):
     f = []
     for firefly in fireflies:
         f.append([firefly.id, firefly.x_coord, firefly.y_coord, firefly.period, firefly.period_threshold, firefly.waiting_time, firefly.start_delay])
-    open('scenario_prob.json','w').write(json.dumps(f))
+    open(params['FILE'],'w').write(json.dumps(f))
 
 def load_scenario():
-    with open('scenario_prob.json') as f:
+    with open(params['FILE']) as f:
         pop = json.load(f)
     fireflies = []
     for id, x_coord, y_coord, period, period_threshold, waiting_time, start_delay in pop:
         fireflies.append(FireFly(id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=start_delay))
+    for ff in fireflies:
+        ff.setNeighbours(get_neighbours(ff, fireflies))
+
     return fireflies

@@ -27,13 +27,13 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
 
     timer = 0
     iteration = 0
-    while abs(max_time - timer ) >= 0.0001:
+    while abs(max_time - timer ) >= 0.01:
         for f in fireflyes:
             f.applyMove(time_step)
 
         changeStates(fireflyes)
-        # if timer >= 4900:
-        #     printFireflyesStates(fireflyes, timer)
+        if timer >= (params['SIMULATION_TIME'] - 10 ):
+            printFireflyesStates(fireflyes, timer)
 
         for i,ff in enumerate(fireflyes):
             ff_periods[i].append(ff.period)
@@ -49,11 +49,22 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
 
         if is_sistem_stable(ffs_stable):
             print("System reached stability at ", timer)
-
+        # if timer >= 9990:
+        #     are_ff_sync(ffs_stable)
         timer += time_step
         iteration += 1
-
+        # printFireflyesStates(fireflye&s, timer)
     plotStuff(ff_periods, ff_blinked, time_step, timer)
+
+def are_ff_sync(ff_stable):
+    last_blinks = []
+    for ff in ff_stable:
+        last_blinks.append(ff[0])
+        
+    if (np.std(last_blinks)) >= 3.0:
+        print((np.std(last_blinks)))
+        input()
+
 
 def is_sistem_stable(ffs_stable):
     for ff in ffs_stable:
@@ -76,15 +87,15 @@ def is_ff_Stable(ff_stability, iteration):
 def plotStuff(ff_periods, ff_blinked, time_step, max):
     plt.figure(1)
     plt.xlabel('Time step')
-    plt.ylabel('Fireflyes periods')
+    plt.ylabel('Fireflies periods')
     colors = iter(cm.rainbow(np.linspace(0, 1, len(ff_blinked))))
-    x = [i for i in np.arange(time_step,max,time_step)]
+    x = [i for i in np.arange(0,max,time_step)]
     for i in range(len(ff_periods)):
         plt.scatter(x,ff_periods[i],s=1, color=next(colors))
 
     plt.figure(2)
     plt.xlabel('Time step')
-    plt.ylabel('Fireflyes')
+    plt.ylabel('Fireflies')
     plt.yticks(np.arange(1, len(ff_blinked) + 1, 1))
     plt.grid(axis='y', linestyle='-')
     plt.ylim(0, len(ff_periods) + 1)
@@ -138,13 +149,13 @@ def printFireflyesStates(fireflies, timer):
     plt.cla()
 
     plt.xlim(-0.5, params['X_MAX'])
-    plt.ylim(0.5, params['Y_MAX'])
+    plt.ylim(-0.5, params['Y_MAX'])
     plt.scatter(x_,y_,c="black")
     plt.scatter(x_blink,y_blink,c="red")
     plt.pause(0.01)
 
-    print("Periods:", end='   ')
-    for firefly in fireflies:
-        print("%.3f" % firefly.period, end='   ')
+    # print("Periods:", end='   ')
+    # for firefly in fireflies:
+    #     print("%.3f" % firefly.period, end='   ')
 
     print()
