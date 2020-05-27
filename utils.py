@@ -50,7 +50,7 @@ def generate_population_two_groups_different_periods():
     for x in range(3, 6):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 100], 0))
+                population.append(gen_firefly(id, x, y, [5, 10], 0))
                 id += 1
             flag = not flag
         flag = not flag
@@ -274,15 +274,15 @@ def get_neighbours(firefly, fireflies):
 def save_scenario(fireflies):
     f = []
     for firefly in fireflies:
-        f.append([firefly.id, firefly.x_coord, firefly.y_coord, firefly.period, firefly.period_threshold, firefly.waiting_time, firefly.start_delay])
+        f.append([firefly.id, firefly.x_coord, firefly.y_coord, firefly.period, firefly.period_threshold, firefly.waiting_time, firefly.start_delay, firefly.group_id])
     open(params['FILE'],'w').write(json.dumps(f))
 
 def load_scenario():
     with open(params['FILE']) as f:
         pop = json.load(f)
     fireflies = []
-    for id, x_coord, y_coord, period, period_threshold, waiting_time, start_delay in pop:
-        fireflies.append(FireFly(id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=start_delay))
+    for id, x_coord, y_coord, period, period_threshold, waiting_time, start_delay, group_id in pop:
+        fireflies.append(FireFly(id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=start_delay, group_id=group_id))
     for ff in fireflies:
         ff.setNeighbours(get_neighbours(ff, fireflies))
 

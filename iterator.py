@@ -88,7 +88,7 @@ def check_sync_groups(ff_last_blink, num_of_different_groups, timer, iteration, 
 
 def print_sync_periods(groups_blinked_syncs, num_of_different_groups):
     for i, flash_times in enumerate(groups_blinked_syncs):
-        print("Synchronising streaks for group  ", i)
+        print("Synchronizing streaks for group  ", i)
 
         longest = [0,0]
         j = 0
@@ -124,25 +124,25 @@ def print_sync_periods(groups_blinked_syncs, num_of_different_groups):
 
 
 
-# def check_sync_groups(ff_last_blink, num_of_diff_groups, timer, iteration, groups_blinked_syncs, fireflyes):
-#     group_sync = [True] * num_of_diff_groups
-#
-#     for info in ff_last_blink:
-#         if iteration - info[1] > 3 or iteration < 3:
-#             group_sync[info[0]] = False
-#
-#     for i,g in enumerate(group_sync):
-#         if g:
-#             a = timer
-#             print("Timer now is:  ", timer)
-#             for ff in fireflyes:
-#                 if ff.group_id == i:
-#                     print(ff.period)
-#
-#             print()
-#             #print("Group ",i, "   blinked in sync in time step", timer)
-#             if groups_blinked_syncs[i][-1] < timer - 3 * 0.1:
-#                 groups_blinked_syncs[i].append(timer)
+def check_sync_groups2(ff_last_blink, num_of_diff_groups, timer, iteration, groups_blinked_syncs, fireflyes):
+    group_sync = [True] * num_of_diff_groups
+
+    for info in ff_last_blink:
+        if iteration - info[1] > 3 or iteration < 3:
+            group_sync[info[0]] = False
+
+    for i,g in enumerate(group_sync):
+        if g:
+            a = timer
+            print("Timer now is:  ", timer)
+            for ff in fireflyes:
+                if ff.group_id == i:
+                    print(ff.period)
+
+            print()
+            #print("Group ",i, "   blinked in sync in time step", timer)
+            if groups_blinked_syncs[i][-1] < timer - 3 * 0.1:
+                groups_blinked_syncs[i].append(timer)
 
 
 

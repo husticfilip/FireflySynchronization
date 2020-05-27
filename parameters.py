@@ -20,5 +20,5 @@ params = {
     'X_MAX': 15,
     'Y_MAX': 15,
     'MOORE_DIST': 4,
-    'FILE': 'scenarioD.json'
+    'FILE': 'scenarioA.json'
 }

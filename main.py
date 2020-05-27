@@ -20,9 +20,9 @@ THINK ABOUT THIS:
 """
 
 def iteratingMain():
-    population = generate_population()
+    # population = generate_population()
     # save_scenario(population)
-    # population = load_scenario()
+    population = load_scenario()
     
     time_step = 0.1
     max_time = params['SIMULATION_TIME']
