@@ -23,7 +23,14 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
     display_population(fireflyes)
     ff_periods = [[] for i in range(len(fireflyes))]
     ff_blinked = [[] for i in range(len(fireflyes))]
-    ffs_stable = [[0,0,False] for i in range(len(fireflyes))] # (iteration_of_last_blink, how_many_iteraions_it_took_to_blink, is ff stable )
+
+    ff_last_blink = []
+    num_of_different_groups = 0 # be carefull, group ids should start from 0,1,2..
+    for ff in fireflyes:
+        if ff.group_id + 1 > num_of_different_groups:
+            num_of_different_groups = ff.group_id + 1
+        ff_last_blink.append([ff.group_id, 0])
+    groups_blinked_syncs = [[0] for i in range(num_of_different_groups)]
 
     timer = 0
     iteration = 0
@@ -39,7 +46,7 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
             ff_periods[i].append(ff.period)
 
             if ff.current_state.STAGE == Stage.BLINKED:
-                is_ff_Stable(ffs_stable[i], iteration)
+                ff_last_blink[i][1] = iteration
 
             if timer >= plot_blinking_after:
                 if ff.current_state.STAGE == Stage.BLINKED:
@@ -47,14 +54,34 @@ def saveIterator(fireflyes, time_step = 0.1, max_time = 10):
                 else:
                     ff_blinked[i].append((timer, 0))
 
-        if is_sistem_stable(ffs_stable):
-            print("System reached stability at ", timer)
-        # if timer >= 9990:
-        #     are_ff_sync(ffs_stable)
+        check_sync_groups(ff_last_blink, num_of_different_groups, timer, iteration, groups_blinked_syncs, fireflyes)
         timer += time_step
         iteration += 1
-        # printFireflyesStates(fireflye&s, timer)
     plotStuff(ff_periods, ff_blinked, time_step, timer)
+
+
+def check_sync_groups(ff_last_blink, num_of_diff_groups, timer, iteration, groups_blinked_syncs, fireflyes):
+    group_sync = [True] * num_of_diff_groups
+
+    for info in ff_last_blink:
+        if iteration - info[1] > 3 or iteration < 3:
+            group_sync[info[0]] = False
+
+    for i,g in enumerate(group_sync):
+        if g:
+            a = timer
+            print("Timer now is:  ", timer)
+            for ff in fireflyes:
+                if ff.group_id == i:
+                    print(ff.period)
+
+            print()
+            #print("Group ",i, "   blinked in sync in time step", timer)
+            if groups_blinked_syncs[i][-1] < timer - 3 * 0.1:
+                groups_blinked_syncs[i].append(timer)
+
+
+
 
 def are_ff_sync(ff_stable):
     last_blinks = []
