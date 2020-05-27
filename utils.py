@@ -50,7 +50,7 @@ def generate_population_two_groups_different_periods():
     for x in range(3, 6):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 10]))
+                population.append(gen_firefly(id, x, y, [5, 10], 0))
                 id += 1
             flag = not flag
         flag = not flag
@@ -59,7 +59,7 @@ def generate_population_two_groups_different_periods():
     for x in range(10,13):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [100, 105]))
+                population.append(gen_firefly(id, x, y, [100, 105], 1))
                 id += 1
             flag = not flag
         flag = not flag
@@ -76,7 +76,7 @@ def generate_population_two_groups_with_bridge():
     for x in range(2, 5):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 10]))
+                population.append(gen_firefly(id, x, y, [5, 10], 0))
                 id += 1
             flag = not flag
         flag = not flag
@@ -85,19 +85,19 @@ def generate_population_two_groups_with_bridge():
     for x in range(10,13):
         for y in range(5, 11):
             if flag:
-                population.append(gen_firefly(id, x, y, [25, 30]))
+                population.append(gen_firefly(id, x, y, [25, 30], 0))
                 id += 1
             flag = not flag
         flag = not flag
-    population.append(gen_firefly(id, 5, 7, [5, 30]))
+    population.append(gen_firefly(id, 5, 7, [5, 30], 0))
     id += 1
-    population.append(gen_firefly(id, 7, 7, [5, 30]))
+    population.append(gen_firefly(id, 7, 7, [5, 30], 0))
     id += 1
-    population.append(gen_firefly(id, 9, 7, [5, 30]))
+    population.append(gen_firefly(id, 9, 7, [5, 30], 0))
     id += 1
-    population.append(gen_firefly(id, 6, 8, [5, 30]))
+    population.append(gen_firefly(id, 6, 8, [5, 30], 0))
     id += 1
-    population.append(gen_firefly(id, 8, 8, [5, 30]))
+    population.append(gen_firefly(id, 8, 8, [5, 30], 0))
 
     for ff in population:
         ff.setNeighbours(get_neighbours(ff, population))
@@ -112,7 +112,7 @@ def generate_population_four_groups_different_periods():
     for x in range(3, 6):
         for y in range(3, 6):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 10]))
+                population.append(gen_firefly(id, x, y, [5, 10], 0))
                 id += 1
             flag = not flag
 
@@ -120,7 +120,7 @@ def generate_population_four_groups_different_periods():
     for x in range(3, 6):
         for y in range(9, 12):
             if flag:
-                population.append(gen_firefly(id, x, y, [100, 105]))
+                population.append(gen_firefly(id, x, y, [100, 105], 1))
                 id += 1
             flag = not flag
 
@@ -128,7 +128,7 @@ def generate_population_four_groups_different_periods():
     for x in range(9, 12):
         for y in range(9, 12):
             if flag:
-                population.append(gen_firefly(id, x, y, [200, 205]))
+                population.append(gen_firefly(id, x, y, [200, 205], 2))
                 id += 1
             flag = not flag
 
@@ -136,7 +136,7 @@ def generate_population_four_groups_different_periods():
     for x in range(9, 12):
         for y in range(3, 6):
             if flag:
-                population.append(gen_firefly(id, x, y, [300, 305]))
+                population.append(gen_firefly(id, x, y, [300, 305], 3))
                 id += 1
             flag = not flag
 
@@ -154,7 +154,7 @@ def generate_population_four_groups_with_bridge():
     for x in range(3, 6):
         for y in range(3, 6):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 10]))
+                population.append(gen_firefly(id, x, y, [5, 10], 0))
                 id += 1
             flag = not flag
 
@@ -162,7 +162,7 @@ def generate_population_four_groups_with_bridge():
     for x in range(3, 6):
         for y in range(9, 12):
             if flag:
-                population.append(gen_firefly(id, x, y, [100, 105]))
+                population.append(gen_firefly(id, x, y, [100, 105], 0))
                 id += 1
             flag = not flag
 
@@ -170,7 +170,7 @@ def generate_population_four_groups_with_bridge():
     for x in range(9, 12):
         for y in range(9, 12):
             if flag:
-                population.append(gen_firefly(id, x, y, [200, 205]))
+                population.append(gen_firefly(id, x, y, [200, 205], 0))
                 id += 1
             flag = not flag
 
@@ -178,7 +178,7 @@ def generate_population_four_groups_with_bridge():
     for x in range(9, 12):
         for y in range(3, 6):
             if flag:
-                population.append(gen_firefly(id, x, y, [300, 305]))
+                population.append(gen_firefly(id, x, y, [300, 305], 0))
                 id += 1
             flag = not flag
 
@@ -187,7 +187,7 @@ def generate_population_four_groups_with_bridge():
     for x in range(6, 9):
         for y in range(6, 9):
             if flag:
-                population.append(gen_firefly(id, x, y, [5, 305]))
+                population.append(gen_firefly(id, x, y, [5, 305], 0))
                 id += 1
             flag = not flag
 
@@ -202,14 +202,14 @@ def generate_population_with_probability():
     for x in range(0, params["X_MAX"]):
         for y in range(0, params["Y_MAX"]):
             if random.random() < 0.5:
-                population.append(gen_firefly(id, x, y, [5, 30]))
+                population.append(gen_firefly(id, x, y, [5, 30], 0))
                 id += 1
     return population
 
 
-def gen_firefly(id, x_coord, y_coord, period_domain):
+def gen_firefly(id, x_coord, y_coord, period_domain, group_id):
     return FireFly(id, x_coord, y_coord, random.uniform(period_domain[0], period_domain[1]), period_threshold=0,
-                   waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0)
+                   waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0, group_id = group_id)
 
 
 def generate_population():
