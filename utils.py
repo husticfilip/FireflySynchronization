@@ -14,8 +14,6 @@ import json
 #
 #############################################
 
-
-
 def generate_population_randomly_grid():
     x_max = params['X_MAX']
     y_max = params['Y_MAX']
@@ -260,11 +258,10 @@ def contFunction(A=0.05):
 ################################################
 
 
-
 def get_neighbours(firefly, fireflies):
     neighbors = []
     for f in fireflies:
-        if f.id != firefly.id:
+        if f.id != firefly.id and f.group_id == firefly.group_id:
             dx = abs(firefly.x_coord - f.x_coord)
             dy = abs(firefly.y_coord - f.y_coord)
             if dx <= params["MOORE_DIST"] and dy <= params["MOORE_DIST"]:
