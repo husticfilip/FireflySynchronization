@@ -2,40 +2,21 @@ import threading
 import time
 from utils import  *
 from display import *
-
-"""
-NOTES
-- list to keep the fireflies that blinked each second
-
-- Firefly reacts only to first neighbour?
-
-THINK ABOUT THIS:
-- what is the best way to work with individuals in threads ?
-- how to update the blinking plot?
-
-"""
-
-#TODO: function to save population
-# Function to load population, from json
+from iterator import *
+import turtle
+import numpy
+from parameters import params
 
 
-def main():
-    threads = []
-    population = generate_population_manualy()
-    display_population(population)
-
-    for firefly in population:
-        t = threading.Thread(target=firefly.run)
-        t.setDaemon(True)
-        threads.append(t)
-
-    for worker in threads:
-        worker.start()
-        time.sleep(0.1) #TODO remove magic number later
-
-    plt.show()
-
+def iteratingMain():
+    population = generate_population()
+    # save_scenario(population)
+    # population = load_scenario()
+    
+    time_step = 0.1
+    max_time = params['SIMULATION_TIME']
+    saveIterator(population, time_step, max_time)
 
 if __name__ == "__main__":
     for _ in range(experimentation['NR_EXP']):
-        main()
+        iteratingMain()
