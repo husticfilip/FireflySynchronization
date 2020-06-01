@@ -1,20 +1,13 @@
-import threading
-import time
 from utils import  *
-from display import *
 from iterator import *
-import turtle
-import numpy
-from parameters import params
+from parameters import params, experimentation
 
 
 def iteratingMain():
     population = generate_population()
-    # save_scenario(population)
-    # population = load_scenario()
-    
-    time_step = 0.1
+    time_step = params['TIME_STEP']
     max_time = params['SIMULATION_TIME']
+
     saveIterator(population, time_step, max_time)
 
 if __name__ == "__main__":

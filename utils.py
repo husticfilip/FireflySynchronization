@@ -1,11 +1,8 @@
 import random
 import math
-from parameters import params, experimentation
-from sklearn.neighbors import KDTree
+from parameters import params
 from fireFly import FireFly
-import numpy as np
-import turtle
-import json
+
 
 
 #############################################
@@ -15,6 +12,10 @@ import json
 #############################################
 
 def generate_population_randomly_grid():
+    """
+    Function generates random generation with values of parameters
+    set in parameter.py/params
+    """
     x_max = params['X_MAX']
     y_max = params['Y_MAX']
     empty_cells = [(x, y) for y in range(y_max) for x in range(x_max)]
@@ -42,6 +43,10 @@ def generate_population_randomly_grid():
     return population
 
 def generate_population_two_groups_different_periods():
+    """
+    This function generates two groups each one differing in the
+    domain of the periods.
+    """
     population = []
     id = 0
     flag = False
@@ -68,6 +73,9 @@ def generate_population_two_groups_different_periods():
     return population
 
 def generate_population_two_groups_with_bridge():
+    """
+    Function generates two groups with bridge fireflies between them
+    """
     population = []
     id = 0
     flag = False
@@ -103,6 +111,10 @@ def generate_population_two_groups_with_bridge():
     return population
 
 def generate_population_four_groups_different_periods():
+    """
+      Function generates four groups of fireflies each
+      with different domain of periods
+    """
     population = []
     id = 0
     flag = True
@@ -145,6 +157,11 @@ def generate_population_four_groups_different_periods():
     return population
 
 def generate_population_four_groups_with_bridge():
+    """
+      Function generates four groups of fireflies each
+      with different domain of periods and one bridge
+      group between them.
+    """
     population = []
     id = 0
     flag = True
@@ -195,6 +212,10 @@ def generate_population_four_groups_with_bridge():
     return population
 
 def generate_population_with_probability():
+    """
+      Function generates firefly on one cell of th grid
+      with given probability.
+    """
     population = []
     id = 0
     for x in range(0, params["X_MAX"]):
@@ -207,7 +228,7 @@ def generate_population_with_probability():
 
 def gen_firefly(id, x_coord, y_coord, period_domain, group_id):
     return FireFly(id, x_coord, y_coord, random.uniform(period_domain[0], period_domain[1]), period_threshold=0,
-                   waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0, group_id = group_id)
+                   waiting_time=0.2, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0, group_id = group_id)
 
 
 def generate_population():
@@ -259,6 +280,10 @@ def contFunction(A=0.05):
 
 
 def get_neighbours(firefly, fireflies):
+    """
+      Function returns all neighbouring fireflies in the provided
+      Moore distance from provided firefly.
+    """
     neighbors = []
     for f in fireflies:
         if f.id != firefly.id and f.group_id == firefly.group_id:
@@ -267,20 +292,3 @@ def get_neighbours(firefly, fireflies):
             if dx <= params["MOORE_DIST"] and dy <= params["MOORE_DIST"]:
                 neighbors.append(f)
     return neighbors
-
-def save_scenario(fireflies):
-    f = []
-    for firefly in fireflies:
-        f.append([firefly.id, firefly.x_coord, firefly.y_coord, firefly.period, firefly.period_threshold, firefly.waiting_time, firefly.start_delay, firefly.group_id])
-    open(params['FILE'],'w').write(json.dumps(f))
-
-def load_scenario():
-    with open(params['FILE']) as f:
-        pop = json.load(f)
-    fireflies = []
-    for id, x_coord, y_coord, period, period_threshold, waiting_time, start_delay, group_id in pop:
-        fireflies.append(FireFly(id, x_coord, y_coord, period, period_threshold, waiting_time, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=start_delay, group_id=group_id))
-    for ff in fireflies:
-        ff.setNeighbours(get_neighbours(ff, fireflies))
-
-    return fireflies
