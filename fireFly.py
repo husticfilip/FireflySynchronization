@@ -31,8 +31,8 @@ class FireFly():
         self.period = period
         self.start_delay = start_delay
         self.waiting_time = waiting_time
-        self.add_time_fun = add_time_fun
-        self.sub_time_fun = sub_time_fun
+        self.add_time_fun = add_time_fun    # function which will be adding to the current period, function depends on current period
+        self.sub_time_fun = sub_time_fun    # function which will be subtracting from the current period, function depends on current period
         self.got_signal_count = 0
         self.neigbours = []
         self.half_of_neighbours = 0

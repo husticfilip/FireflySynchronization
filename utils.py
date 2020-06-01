@@ -228,7 +228,7 @@ def generate_population_with_probability():
 
 def gen_firefly(id, x_coord, y_coord, period_domain, group_id):
     return FireFly(id, x_coord, y_coord, random.uniform(period_domain[0], period_domain[1]), period_threshold=0,
-                   waiting_time=0.2, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0, group_id = group_id)
+                   waiting_time=1, sub_time_fun=linearFunct(0.01), add_time_fun=expFunct(0.01, -1), start_delay=0, group_id = group_id)
 
 
 def generate_population():
